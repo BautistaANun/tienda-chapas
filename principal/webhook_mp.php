@@ -144,7 +144,7 @@ if ($estadoMP === 'approved') {
 
     // admin
     enviarMail(
-        'bautistaanunez0510@gmail.com',
+        'contacto@chapasre.store',
         'Pago aprobado (Mercado Pago)',
         "<p>La compra #$compraId fue aprobada.</p>"
     );
