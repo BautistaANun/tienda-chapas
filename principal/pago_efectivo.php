@@ -60,11 +60,16 @@ if (!empty($compra['usuario_id'])) {
 if ((int)$compra['mail_enviado'] === 0) {
 
     /* Detalle de items */
-    $stmt = $pdo->prepare("
-        SELECT nombre, precio, cantidad
-        FROM compra_items
-        WHERE compra_id = ?
-    ");
+   $stmt = $pdo->prepare("
+    SELECT 
+        p.nombre AS nombre,
+        ci.precio,
+        ci.cantidad
+    FROM compra_items ci
+    JOIN productos p ON p.id = ci.producto_id
+    WHERE ci.compra_id = ?
+");
+
     $stmt->execute([$compra['id']]);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
