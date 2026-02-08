@@ -1,6 +1,12 @@
 <?php
 require __DIR__ . '/../config/database.php';
 require __DIR__ . '/../includes/mailer.php';
+require __DIR__ . '/../config/config.php';
+
+if (APP_ENV !== 'dev' || empty($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
+    http_response_code(403);
+    exit('Acceso denegado');
+}
 
 $compraId = $_GET['id'] ?? null;
 

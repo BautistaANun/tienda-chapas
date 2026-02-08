@@ -1,214 +1,116 @@
-/* =========================
-   RESET
-========================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+# 🛒 Tienda Chapas – Sistema de ventas online
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #ebebeb;
-    color: #333;
-}
+Sistema de ventas online desarrollado en **PHP + MySQL**, con carrito de compras, pagos en efectivo y Mercado Pago, envío de mails automáticos y panel de usuario/admin.
 
-/* =========================
-   HEADER MERCADOLIBRE
-========================= */
-.header {
-    background:  darkcyan;
-    padding: 1.2rem 2rem;
-}
+---
 
-.header h1 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 0.8rem;
-}
+## 🚀 Requisitos del servidor
 
-.header nav {
-    display: flex;
-    justify-content: center;
-    gap: 1.2rem;
-    font-size: 0.95rem;
-}
+- PHP **8.0 o superior**
+- MySQL / MariaDB
+- Apache o Nginx
+- **HTTPS obligatorio** (requerido por Mercado Pago)
+- Acceso a phpMyAdmin o similar
+- SMTP activo (email del dominio recomendado)
 
-.header nav a {
-    color: #333;
-    font-weight: 500;
-}
+---
 
-/* =========================
-   CONTENEDOR PRINCIPAL
-========================= */
-.contenedor {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1.5rem;
-}
+## 📂 Estructura del proyecto
+
+El proyecto debe subirse dentro de la carpeta pública del hosting (ej: `public_html`):
+
+public_html/
+├─ index.php
+├─ principal/
+├─ includes/
+├─ config/
+├─ assets/
+├─ database/
 
 
-/* =========================
-   FLASH
-========================= */
-.flash {
-    background: #fff;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 6px;
-    border-left: 5px solid #3483fa;
-}
+---
 
-/* =========================
-   BUSCADOR
-========================= */
-form {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-}
+## 🗄️ Base de datos
 
-form input[type="text"] {
-    flex: 1;
-    padding: 0.7rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
+1. Crear una base de datos MySQL
+2. Crear un usuario y asignarle **todos los permisos**
+3. Importar el archivo SQL:
 
-form button {
-    background: #3483fa;
-    color: #fff;
-    border: none;
-    padding: 0 1.2rem;
-    border-radius: 4px;
-    cursor: pointer;
-}
+/database/tienda_chapas.sql
 
-/* =========================
-   ORDEN
-========================= */
-.orden {
-    margin-bottom: 2rem;
-}
 
-.orden a {
-    margin-right: 1rem;
-    font-size: 0.9rem;
-    color: #3483fa;
-}
+---
 
-/* =========================
-   CATEGORÍA
-========================= */
-h2 {
-    font-size: 1.4rem;
-    margin: 2.5rem 0 1.2rem;
-}
+## ⚙️ Configuración del proyecto
 
-/* =========================
-   GRID PRODUCTOS
-========================= */
-.productos {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-}
+### 🔧 config/database.php
 
-/* =========================
-   CARD PRODUCTO
-========================= */
-.productos > div {
-    background: #fff;
-    border-radius: 6px;
-    padding: 1rem;
-    transition: box-shadow 0.2s;
-    border: 1px solid #eee;
-}
+Editar con los datos del hosting:
 
-.productos > div:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+```php
+$host = 'localhost';
+$db   = 'NOMBRE_DB';
+$user = 'USUARIO_DB';
+$pass = 'PASSWORD_DB';
 
-.producto-img {
-    height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.8rem;
-}
+🌐 config/config.php
+Configurar la URL base del sitio:
 
-.producto-img img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
 
-.productos h3 {
-    font-size: 1rem;
-    font-weight: normal;
-    margin-bottom: 0.4rem;
-}
+define('BASE_URL', 'https://tudominio.com/');
+define('APP_ENV', 'prod'); // dev | prod
+💳 Mercado Pago (Producción)
+Editar el archivo:
 
-.productos p {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.6rem;
-}
 
-.productos button {
-    width: 100%;
-    background: #3483fa;
-    border: none;
-    color: #fff;
-    padding: 0.6rem;
-    border-radius: 4px;
-    cursor: pointer;
-}
+config/mercadopago.php
+## Colocar:
 
-/* =========================
-   PAGINACIÓN
-========================= */
-.paginacion {
-    display: flex;
-    justify-content: center;
-    margin: 3rem 0;
-    gap: 0.4rem;
-}
+Access Token REAL
 
-.paginacion a {
-    background: #fff;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-}
+Webhook Secret REAL
 
-.paginacion a.activa {
-    background: #3483fa;
-    color: #fff;
-}
+Webhook en Mercado Pago Developers
+Configurar la URL del webhook:
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 1024px) {
-    .productos {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+https://tudominio.com/principal/webhook_mp.php
+📧 Emails (SMTP)
 
-@media (max-width: 768px) {
-    .productos {
-        grid-template-columns: repeat(2, 1fr);
-    }
+## Configurar el envío de mails en:
 
-    .header nav {
-        flex-wrap: wrap;
-    }
-}
 
-@media (max-width: 480px) {
-    .productos {
-        grid-template-columns: 1fr;
-    }
-}
+includes/mailer.php
+📌 Recomendado usar un email del dominio:
+
+
+ventas@tudominio.com
+##✅ Flujo del sistema
+Compra en efectivo → mail automático al cliente y al admin
+
+Compra con Mercado Pago → webhook actualiza el estado automáticamente
+
+Usuario puede ver sus compras
+
+Admin puede ver todas las compras y estados
+
+##🧪 Pruebas recomendadas
+Registro y login
+
+Compra en efectivo
+
+Compra con Mercado Pago
+
+Recepción de mails
+
+Actualización de estado de compra
+
+Visualización en "Mis compras"
+
+##📌 Notas importantes
+El proyecto fue desarrollado y probado en entorno local
+
+pago_forzado.php solo debe existir en entorno de desarrollo (dev)
+
+En -producción-, APP_ENV debe estar configurado como prod
+
+Ante cualquier duda, revisar los comentarios en el código
