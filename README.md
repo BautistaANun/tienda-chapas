@@ -115,4 +115,4 @@ En -producción-, APP_ENV debe estar configurado como prod
 
 Ante cualquier duda, revisar los comentarios en el código
 
-Las credenciales "SMTP" se cargan en entorno de producción (prod). Éstas se pueden colocar directamente en el servidor
+Las credenciales "SMTP" se cargan en entorno de producción (prod). Éstas se pueden colocar directamente en el servidor manualmente
