@@ -14,10 +14,10 @@ function enviarMail($para, $asunto, $mensaje)
     try {
         // SMTP Gmail
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
+        $mail->Host       = '';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'bautistaanunez0510@gmail.com';
-        $mail->Password   = 'tftq tqur lnhm ribj'; // 👈 la de Google
+        $mail->Username   = '';
+        $mail->Password   = ''; // 👈 la de Google, al activar la verificación de dos pasos, no la contraseña del gmail.
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
         $mail->Timeout    = 10;
@@ -35,7 +35,7 @@ function enviarMail($para, $asunto, $mensaje)
         $mail->CharSet = 'UTF-8';
 
         // Remitente y destino
-        $mail->setFrom('bautistaanunez0510@gmail.com', 'Tienda Chapas');
+        $mail->setFrom('contacto@chapasre.store', 'Tienda Chapas');
         $mail->addAddress($para);
 
         // Contenido
