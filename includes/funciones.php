@@ -156,7 +156,7 @@ function setMensaje($mensaje) {
 function getMensaje() {
     if (!empty($_SESSION['mensaje'])) {
         $mensaje = $_SESSION['mensaje'];
-        unset($_SESSION['mensaje']); // 👈 CLAVE
+        unset($_SESSION['mensaje']); // CLAVE
         return $mensaje;
     }
     return null;

@@ -54,7 +54,7 @@ $stmt->execute([$compraId]);
 /* Limpiar última compra */
 unset($_SESSION['ultima_compra_id']);
 
-/* Mensaje correcto */
+/* Mensaje */
 setFlash('warning', 'Compra cancelada');
 
 /* Volver a la tienda */

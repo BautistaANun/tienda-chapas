@@ -6,12 +6,12 @@ require __DIR__ . '/../includes/mailer.php';
 require __DIR__ . '/../config/mercadopago.php';
 
 /* =========================
-   1️⃣ Body crudo
+    Body crudo
    ========================= */
 $body = file_get_contents('php://input');
 
 /* =========================
-   2️⃣ Headers MP
+   Headers MP
    ========================= */
 $signatureHeader = $_SERVER['HTTP_X_SIGNATURE'] ?? '';
 $requestId       = $_SERVER['HTTP_X_REQUEST_ID'] ?? '';
@@ -22,7 +22,7 @@ if (!$signatureHeader || !$requestId) {
 }
 
 /* =========================
-   3️⃣ Parse firma MP
+    Parse firma MP
    x-signature: ts=123456,v1=abcdef
    ========================= */
 parse_str(str_replace(',', '&', $signatureHeader), $signatureParts);
@@ -36,7 +36,7 @@ if (!$ts || !$v1) {
 }
 
 /* =========================
-   4️⃣ Recalcular firma
+    Recalcular firma
    ========================= */
 $manifest = "id:$requestId;ts:$ts;";
 $expectedSignature = hash_hmac('sha256', $manifest, MP_WEBHOOK_SECRET);
@@ -47,7 +47,7 @@ if (!hash_equals($expectedSignature, $v1)) {
 }
 
 /* =========================
-   5️⃣ JSON
+   JSON
    ========================= */
 $data = json_decode($body, true);
 
@@ -59,7 +59,7 @@ if (empty($data['data']['id'])) {
 $paymentId = $data['data']['id'];
 
 /* =========================
-   6️⃣ Consultar pago
+   Consultar pago
    ========================= */
 $ch = curl_init("https://api.mercadopago.com/v1/payments/$paymentId");
 
@@ -80,13 +80,13 @@ if (empty($payment['status'])) {
 }
 
 /* =========================
-   7️⃣
+   Estado MP
    ========================= */
 $estadoMP = $payment['status']; // approved | pending | rejected
 
 
 /* =========================
-   8️⃣ Compra
+   Compra
    ========================= */
 $compraId = $payment['external_reference'] ?? null;
 
@@ -96,7 +96,7 @@ if (!$compraId) {
 }
 
 /* =========================
-   9️⃣ Evitar duplicados
+    Evitar duplicados
    ========================= */
 $stmt = $pdo->prepare("SELECT estado FROM compras WHERE id = ?");
 $stmt->execute([$compraId]);
@@ -125,7 +125,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$estadoCompra, $compraId]);
 
 /* =========================
-   1️⃣1️⃣ Datos compra
+    Datos compra
    ========================= */
 $stmt = $pdo->prepare("
     SELECT c.total, u.email
@@ -137,7 +137,7 @@ $stmt->execute([$compraId]);
 $compra = $stmt->fetch(PDO::FETCH_ASSOC);
 
 /* =========================
-   1️⃣2️⃣ Mails según estado
+    Mails según estado
    ========================= */
 
 if ($estadoMP === 'approved') {
@@ -187,7 +187,7 @@ if ($estadoMP === 'pending') {
 }
 
 /* =========================
-   1️⃣3️⃣ OK
+   OK
    ========================= */
 http_response_code(200);
 echo 'OK';

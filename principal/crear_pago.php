@@ -71,7 +71,7 @@ if (!isset($data['init_point'])) {
     mostrarError('Error al crear el pago en Mercado Pago');
 }
 
-// ❌ NO curl_close()
+// NO curl_close()
 // PHP limpia solo
 
 // redirigir a MP
