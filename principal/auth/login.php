@@ -4,11 +4,12 @@ require __DIR__ . '/../../config/database.php';
 require __DIR__ . '/../../includes/funciones.php';
 
 $errores = [];
-
+// Procesamos el login únicamente si el formulario fue enviado por POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
-
+    
+// Consulta preparada para prevenir SQL Injection
     $stmt = $pdo->prepare("
         SELECT * FROM usuarios
         WHERE email = ? AND activo = 1
@@ -16,9 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Verificación segura de contraseña hasheada
     if (!$usuario || !password_verify($password, $usuario['password'])) {
         $errores[] = 'Email o contraseña incorrectos';
     } else {
+        // Guardamos solo los datos necesarios del usuario autenticado
         $_SESSION['usuario'] = [
             'id' => $usuario['id'],
             'nombre' => $usuario['nombre'],
@@ -31,6 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
+//Posibles mejoras: 
+// Regeneramos el ID de sesión tras autenticación exitosa
+// para prevenir ataques de session fixation
+//session_regenerate_id(true);
 ?>
 
 <!DOCTYPE html>

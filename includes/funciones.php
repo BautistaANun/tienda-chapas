@@ -1,11 +1,22 @@
 <?php
 
-
+// Incluimos sistema de mensajes flash reutilizable
 require_once __DIR__ . '/flash.php';
 
 
+
+/**
+ * Obtiene listado de productos activos aplicando:
+ * - Filtros por categoría y búsqueda
+ * - Ordenamiento controlado
+ * - Paginación
+ * Utiliza consultas preparadas para prevenir SQL Injection.
+ */
 function obtenerProductos(PDO $pdo, array $filtros): array
 {
+
+    // Construcción dinámica segura de filtros
+    // Se utilizan parámetros bind para evitar inyección SQL
     $sql = "SELECT * FROM productos WHERE activo = 1";
     $params = [];
 
@@ -22,6 +33,9 @@ function obtenerProductos(PDO $pdo, array $filtros): array
     $orderBy = obtenerOrderBy($filtros['orden']);
     $sql .= " ORDER BY $orderBy";
 
+    // El ORDER BY no se parametriza directamente en PDO,
+    // por eso se controla mediante una whitelist (obtenerOrderBy)
+
     $limit  = (int) $filtros['porPagina'];
     $offset = ($filtros['page'] - 1) * $limit;
 
@@ -35,6 +49,11 @@ function obtenerProductos(PDO $pdo, array $filtros): array
 
 
 
+
+/**
+ * Obtiene un producto activo por ID.
+ * Se utiliza bindParam tipado para asegurar integridad.
+ */
 function obtenerProductoPorId(PDO $pdo, int $id) {
     $sql = "SELECT * FROM productos WHERE id = :id AND activo = 1";
     $stmt = $pdo->prepare($sql);
@@ -43,6 +62,11 @@ function obtenerProductoPorId(PDO $pdo, int $id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+
+/**
+ * Agrupa productos por categoría.
+ * Facilita renderizado estructurado en la vista.
+ */
 function agruparPorCategoria(array $productos) {
     $resultado = [];
 
@@ -54,7 +78,11 @@ function agruparPorCategoria(array $productos) {
     return $resultado;
 }
 
-
+/**
+ * Resalta coincidencias de búsqueda dentro de un texto.
+ * Escapa primero el contenido para prevenir XSS
+ * antes de aplicar el resaltado.
+ */
 function resaltarTexto($texto, $busqueda) {
     if (!$busqueda) {
         return htmlspecialchars($texto);
@@ -97,11 +125,22 @@ function mostrarError($mensaje) {
 }
 
 
+/**
+ * Escapa texto para salida HTML.
+ * Previene ataques XSS.
+ */
 function e($texto) {
     return htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
 }
 
 
+
+
+/**
+ * Devuelve el total de productos activos
+ * según los filtros aplicados.
+ * Se utiliza para paginación.
+ */
 function contarProductos(PDO $pdo, array $filtros): int
 {
     $sql = "SELECT COUNT(*) FROM productos WHERE activo = 1";
@@ -124,6 +163,11 @@ function contarProductos(PDO $pdo, array $filtros): int
 }
 
 
+/**
+ * Devuelve cláusula ORDER BY validada.
+ * Se utiliza una whitelist para evitar inyección
+ * en campos dinámicos de ordenamiento.
+ */
 function obtenerOrderBy(string $orden): string
 {
     $permitidos = [
@@ -135,6 +179,11 @@ function obtenerOrderBy(string $orden): string
     return $permitidos[$orden] ?? 'nombre ASC';
 }
 
+
+/**
+ * Calcula la cantidad total de ítems en el carrito
+ * almacenado en sesión.
+ */
 function totalItemsCarrito(): int {
     if (!isset($_SESSION['carrito'])) {
         return 0;
@@ -163,18 +212,31 @@ function getMensaje() {
 }
 
 
+
+
+
+ 
 function usuarioLogueado(): bool {
     return isset($_SESSION['usuario']);
-}
+}  // Indica si hay un usuario autenticado.
 
 function usuarioActual() {
     return $_SESSION['usuario'] ?? null;
-}
+}  //Devuelve los datos del usuario autenticado
 
 function usuarioId() {
     return $_SESSION['usuario']['id'] ?? null;
 }
 
+
+
+
+/**
+ * Obtiene una compra validando que:
+ * - Si hay usuario autenticado, solo pueda acceder a su propia compra.
+ * - Si es invitado, solo pueda acceder a compras sin usuario asociado.
+ * Previene acceso indebido a compras de terceros.
+ */
 function obtenerCompraSegura(PDO $pdo, int $compraId, ?array $usuario)
 {
     if ($usuario) {

@@ -126,10 +126,17 @@ $totalPaginas = (int) ceil($totalProductos / $filtros['porPagina']);
 
         <article class="producto-card">
             <a href="productos.php?id=<?= e($producto['id']) ?>">
+               <?php if (!empty($producto['imagen'])): ?>
                 <img
-                    src="../assets/images/<?= e($producto['imagen']) ?>"
-                    alt="<?= e($producto['nombre']) ?>"
+                src="../uploads/images/<?= e($producto['imagen']) ?>"
+                alt="<?= e($producto['nombre']) ?>"
                 >
+                <?php else: ?>
+            <img
+            src="../assets/images/default.png"
+            alt="Imagen no disponible"
+            >
+            <?php endif; ?>
 
                 <h3><?= e($producto['nombre']) ?></h3>
             </a>
@@ -167,7 +174,7 @@ $totalPaginas = (int) ceil($totalProductos / $filtros['porPagina']);
     <?php endfor; ?>
 </nav>
 
-<script src="../assets/js/flash.js"></script>
+<script src="assets/js/flash.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {

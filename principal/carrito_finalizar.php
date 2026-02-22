@@ -1,6 +1,32 @@
 <?php
 session_start();
 
+/*
+|--------------------------------------------------------------------------
+| FINALIZACIÓN DE COMPRA
+|--------------------------------------------------------------------------
+|
+| Este archivo procesa la compra completa:
+| - Valida datos del comprador.
+| - Recalcula el total desde sesión.
+| - Crea la compra en la base de datos.
+| - Inserta datos del comprador.
+| - Inserta los ítems comprados.
+| - Utiliza transacciones para garantizar consistencia.
+|
+| Decisiones técnicas importantes:
+| - No se confía en el total enviado por el frontend.
+| - Se utilizan prepared statements para prevenir SQL Injection.
+| - Se emplea beginTransaction() para evitar estados inconsistentes.
+| - En caso de error se ejecuta rollBack().
+|
+| Es importante a futuro:
+| - Validar stock en tiempo real antes de confirmar.
+| - Descontar stock dentro de la misma transacción.
+| - Revalidar precio actual desde base de datos.
+|
+*/
+
 require __DIR__ . '/../config/database.php';
 require __DIR__ . '/../includes/funciones.php';
 require __DIR__ . '/../includes/mailer.php';
@@ -111,23 +137,51 @@ try {
         $comentario
     ]);
 
-    /* =========================
-       ITEMS
-       ========================= */
-    $stmtItem = $pdo->prepare("
-        INSERT INTO compra_items
-        (compra_id, producto_id, cantidad, precio)
-        VALUES (?, ?, ?, ?)
+   /* =========================
+   VALIDACIÓN Y DESCUENTO STOCK
+   ========================= */
+
+$stmtItem = $pdo->prepare("
+    INSERT INTO compra_items
+    (compra_id, producto_id, cantidad, precio)
+    VALUES (?, ?, ?, ?)
+");
+
+foreach ($_SESSION['carrito'] as $item) {
+
+    // Bloquea fila del producto
+    $stmtProducto = $pdo->prepare("SELECT stock, precio, activo FROM productos WHERE id = ? FOR UPDATE");
+    $stmtProducto->execute([$item['id']]);
+    $producto = $stmtProducto->fetch();
+
+    if (!$producto || $producto['activo'] == 0) {
+        throw new Exception("Producto no disponible");
+    }
+
+    if ($producto['stock'] < $item['cantidad']) {
+        throw new Exception("Stock insuficiente para producto ID " . $item['id']);
+    }
+
+    // Insertar ítem con precio REAL de base
+    $stmtItem->execute([
+        $compraId,
+        $item['id'],
+        $item['cantidad'],
+        $producto['precio']
+    ]);
+
+    // Descontar stock
+    $stmtUpdate = $pdo->prepare("
+        UPDATE productos 
+        SET stock = stock - ? 
+        WHERE id = ?
     ");
 
-    foreach ($_SESSION['carrito'] as $item) {
-        $stmtItem->execute([
-            $compraId,
-            $item['id'],
-            $item['cantidad'],
-            $item['precio']
-        ]);
-    }
+    $stmtUpdate->execute([
+        $item['cantidad'],
+        $item['id']
+    ]);
+}
 
     $pdo->commit();
 
