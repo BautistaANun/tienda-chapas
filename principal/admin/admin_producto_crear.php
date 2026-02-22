@@ -15,13 +15,16 @@ require __DIR__ . '/../../includes/funciones.php';
 <head>
     <title>Crear Producto</title>
     <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+
 </head>
 <body>
 
-<h1>Crear Nuevo Producto</h1>
+ 
+<h1 class="contenedor">Crear Nuevo Producto</h1>
 
-<form action="admin_producto_guardar.php" method="post" enctype="multipart/form-data">
-
+<form action="admin_producto_guardar.php" method="post" enctype="multipart/form-data" class="contenedor">
+   
     <label>Nombre:</label><br>
     <input type="text" name="nombre" required><br><br>
 
@@ -36,14 +39,7 @@ require __DIR__ . '/../../includes/funciones.php';
 
     <label>Imagen:</label>
     <input type="file" name="imagen" accept="image/*"><br><br>
-    <?php
-    // Limitar tamaño a 2MB
-    $maxSize = 2 * 1024 * 1024; // 2MB
-
-    if ($_FILES['imagen']['size'] > $maxSize) {
-    die("La imagen supera el tamaño máximo permitido (2MB).");
-    }
-    ?>
+  
 
     <label>Descripción:</label><br>
     <textarea name="descripcion" rows="4" required></textarea><br><br>
@@ -54,11 +50,12 @@ require __DIR__ . '/../../includes/funciones.php';
         <option value="0">No</option>
     </select><br><br>
 
-    <button type="submit">Guardar Producto</button>
-</form>
+  <button type="submit"class="btn-principal">Guardar Producto</button>
 
+</form>
 <br>
-<a href="admin_productos.php">← Volver al listado</a>
+<a href="admin_productos.php" class="admin-btn">← Volver al listado</a>
 
 </body>
+
 </html>

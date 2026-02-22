@@ -48,13 +48,14 @@ if (!$producto) {
 <html>
 <head>
     <title>Editar Producto</title>
+    <link rel="stylesheet" href="../../assets/css/admin.css">
     <link rel="stylesheet" href="../../assets/css/styles.css">
 </head>
 <body>
 
-<h1>Editar Producto</h1>
+<h1 class="contenedor">Editar Producto</h1>
 
-<form action="admin_producto_actualizar.php" method="post" enctype="multipart/form-data">
+<form action="admin_producto_actualizar.php" method="post" enctype="multipart/form-data" class="contenedor">
 
     <input type="hidden" name="id" value="<?= $producto['id'] ?>">
 
@@ -86,11 +87,11 @@ if (!$producto) {
         <option value="0" <?= !$producto['activo'] ? 'selected' : '' ?>>No</option>
     </select><br><br>
 
-    <button type="submit">Actualizar Producto</button>
+    <button type="submit" class="btn-principal">Actualizar Producto</button>
 </form>
 
 <br>
-<a href="admin_productos.php">← Volver al listado</a>
+<a href="admin_productos.php" class="btn-secundario">← Volver al listado</a>
 
 </body>
 </html>

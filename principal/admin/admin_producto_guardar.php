@@ -58,6 +58,7 @@ if ($activo !== 0 && $activo !== 1) {
    ========================= */
 
 $imagenNombre = null;
+   
 
 if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0) {
 
@@ -68,6 +69,13 @@ if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0) {
 
     move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino);
 }
+
+ // Limitar tamaño a 2MB
+    $maxSize = 2 * 1024 * 1024; // 2MB
+
+    if ($_FILES['imagen']['size'] > $maxSize) {
+    die("La imagen supera el tamaño máximo permitido (2MB).");
+    }
 
 $stmt = $pdo->prepare("
     INSERT INTO productos

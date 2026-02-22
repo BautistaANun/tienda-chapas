@@ -56,7 +56,7 @@ $mensaje = urlencode(
 <div class="producto-detalle">
 
     <div class="producto-detalle-img">
-        <img src="../assets/images/<?= e($producto['imagen']) ?>"
+        <img src="../uploads/images/<?= e($producto['imagen']) ?>"
              alt="<?= e($producto['nombre']) ?>">
     </div>
 

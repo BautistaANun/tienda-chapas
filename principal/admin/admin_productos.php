@@ -17,16 +17,17 @@ $productos = $stmt->fetchAll();
 <html>
 <head>
     <title>Panel Admin - Productos</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
+     <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
 </head>
 <body>
 
-<h1>Panel de Administración - Productos</h1>
+<h1 class>Panel de Administración - Productos</h1>
 
-<a href="admin_producto_crear.php" class="btn-principal">➕ Crear Producto</a>
+<a href="admin_producto_crear.php" class="admin-btn">➕ Crear Producto</a>
 <br><br>
 
-<table border="1" cellpadding="8">
+<table class="admin-table th"border="1" cellpadding="8">
     <tr>
         <th>ID</th>
         <th>Nombre</th>
@@ -56,7 +57,7 @@ $productos = $stmt->fetchAll();
             <td>
                 <?= $producto['activo'] ? 'Sí' : 'No' ?>     
             </td>
-            <td>
+            <td class="admin-card">
                 <a href="admin_producto_editar.php?id=<?= $producto['id'] ?>">✏ Editar</a>
                 |
                 <a href="admin_producto_toggle.php?id=<?= $producto['id'] ?>">
@@ -69,7 +70,7 @@ $productos = $stmt->fetchAll();
 </table>
 
 <br>
-<a href="../index.php">← Volver a la tienda</a>
+<a href="../index.php" class="btn-secundario">← Volver a la tienda</a>
 
 </body>
 </html>

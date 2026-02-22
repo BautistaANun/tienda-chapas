@@ -235,25 +235,27 @@ function usuarioId() {
  * Obtiene una compra validando que:
  * - Si hay usuario autenticado, solo pueda acceder a su propia compra.
  * - Si es invitado, solo pueda acceder a compras sin usuario asociado.
- * Previene acceso indebido a compras de terceros.
+ * Previene acceso indebido a compras de terceros EXCEPTUANDO en admin/dashboard.php.
  */
-function obtenerCompraSegura(PDO $pdo, int $compraId, ?array $usuario)
+function obtenerCompraSegura($pdo, $id, $usuario)
 {
-    if ($usuario) {
-        // Usuario o admin → solo su compra
-        $stmt = $pdo->prepare("
-            SELECT * FROM compras
-            WHERE id = ? AND usuario_id = ?
-        ");
-        $stmt->execute([$compraId, $usuario['id']]);
-    } else {
-        // Invitado → solo compras sin usuario
-        $stmt = $pdo->prepare("
-            SELECT * FROM compras
-            WHERE id = ? AND usuario_id IS NULL
-        ");
-        $stmt->execute([$compraId]);
+    if (!$usuario) {
+        return false;
     }
 
+    // Admin → acceso total
+    if (($usuario['rol'] ?? '') === 'admin') {
+        $stmt = $pdo->prepare("SELECT * FROM compras WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Usuario común → solo su compra
+    $stmt = $pdo->prepare("
+        SELECT * FROM compras
+        WHERE id = ?
+        AND usuario_id = ?
+    ");
+    $stmt->execute([$id, $usuario['id']]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }

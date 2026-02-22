@@ -14,14 +14,7 @@ if (!isset($_SESSION['usuario'])) {
 $usuario = $_SESSION['usuario'];
 $esAdmin = ($usuario['rol'] ?? '') === 'admin';
 
-if ($esAdmin) {
-    $stmt = $pdo->query("
-        SELECT c.*, u.nombre AS usuario_nombre, u.email
-        FROM compras c
-        LEFT JOIN usuarios u ON u.id = c.usuario_id
-        ORDER BY c.created_at DESC
-    ");
-} else {
+
    $stmt = $pdo->prepare("
     SELECT *
     FROM compras
@@ -31,7 +24,6 @@ if ($esAdmin) {
 ");
 $stmt->execute([$usuario['id']]);
 
-}
 
 $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -39,10 +31,6 @@ $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="contenedor compras-container">
 
     <h1 class="compras-titulo">🛍️ Mis compras</h1>
-
-    <?php if ($esAdmin): ?>
-        <p class="admin-badge">Vista administrador</p>
-    <?php endif; ?>
 
     <?php if (empty($compras)): ?>
         <div class="compras-vacio">

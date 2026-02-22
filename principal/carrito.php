@@ -12,6 +12,7 @@ $carrito = $_SESSION['carrito'] ?? [];
 $total = 0;
 
 
+
 ?>
 <main class="contenedor">
 <div class="carrito-container">
@@ -59,11 +60,13 @@ $total = 0;
             <td class="carrito-img">
                 <?php if (!empty($item['imagen'])): ?>
              <img 
-                src="../assets/images/<?= e($item['imagen']) ?>" 
+                src="../uploads/images/<?= e($item['imagen']) ?>" 
+               
                 alt="<?= e($item['nombre']) ?>"
                 >
                 <?php endif; ?>
             </td>
+            
 
             <td><?= e($item['nombre']) ?></td>
 
