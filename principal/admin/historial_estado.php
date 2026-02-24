@@ -4,11 +4,13 @@ session_start();
 require dirname(__DIR__) . '/../config/database.php';
 require dirname(__DIR__) . '/../includes/funciones.php';
 
-/* Seguridad */
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
-    mostrarError('Acceso restringido');
+if (
+    !isset($_SESSION['usuario']) ||
+    !in_array($_SESSION['usuario']['rol'], ['admin','superadmin'], true)
+) {
+    header('Location: ../index.php');
+    exit;
 }
-
 /* Validar ID */
 $compraId = $_GET['id'] ?? null;
 

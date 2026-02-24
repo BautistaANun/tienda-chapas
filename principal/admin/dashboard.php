@@ -5,7 +5,10 @@ require dirname(__DIR__) . '/../includes/funciones.php';
 require dirname(__DIR__) . '/../config/config.php';
 
 /* Seguridad */
-if (!isset($_SESSION['usuario']) || ($_SESSION['usuario']['rol'] ?? '') !== 'admin') {
+if (
+    !isset($_SESSION['usuario']) ||
+    !in_array($_SESSION['usuario']['rol'] ?? '', ['admin','superadmin'], true)
+) {
     mostrarError('Acceso restringido');
 }
 
@@ -83,8 +86,13 @@ $ventasMes = $pdo->query("
             <a href="<?= BASE_URL ?>principal/admin/compras.php">📋 Compras</a>
             <a href="<?= BASE_URL ?>principal/admin/usuario_compras.php">👥 Usuarios</a>
             <a href="<?= BASE_URL ?>principal/exportar_compras_csv.php">⬇ Exportar CSV</a>
+             <?php if ($_SESSION['usuario']['rol'] === 'superadmin'): ?>
+        <a href="<?= BASE_URL ?>principal/admin/nuevoAdmin.php">
+            + Crear administrador
+         </a>
+        <?php endif; ?>
             <hr>
-            <a href="<?= BASE_URL ?>principal/index.php">🏪 Volver a la tienda</a>
+            <a href="<?= BASE_URL ?>principal/index.php">🏪 Volver </a>
         </nav>
 
     </aside>

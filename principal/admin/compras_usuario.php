@@ -4,10 +4,13 @@ require dirname(__DIR__) . '/../config/database.php';
 require dirname(__DIR__) . '/../includes/funciones.php';
 require dirname(__DIR__) . '/../config/config.php';
 
-if (!isset($_SESSION['usuario']) || ($_SESSION['usuario']['rol'] ?? '') !== 'admin') {
-    mostrarError('Acceso restringido');
+if (
+    !isset($_SESSION['usuario']) ||
+    !in_array($_SESSION['usuario']['rol'], ['admin','superadmin'], true)
+) {
+    header('Location: ../index.php');
+    exit;
 }
-
 $usuario_id = $_GET['id'] ?? null;
 
 if (!ctype_digit($usuario_id)) {

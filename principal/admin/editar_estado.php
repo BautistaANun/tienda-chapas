@@ -5,8 +5,12 @@ require dirname(__DIR__) . '/../config/database.php';
 require dirname(__DIR__) . '/../includes/funciones.php';
 
 /* 🔐 Seguridad */
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
-    mostrarError('Acción no autorizada');
+if (
+    !isset($_SESSION['usuario']) ||
+    !in_array($_SESSION['usuario']['rol'], ['admin','superadmin'], true)
+) {
+    header('Location: ../index.php');
+    exit;
 }
 
 $compraId = $_POST['compra_id'] ?? null;

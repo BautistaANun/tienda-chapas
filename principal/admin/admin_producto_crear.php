@@ -1,11 +1,12 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
+if (
+    !isset($_SESSION['usuario']) ||
+    !in_array($_SESSION['usuario']['rol'], ['admin','superadmin'], true)
+) {
     header('Location: ../index.php');
     exit;
 }
-
 require __DIR__ . '/../../config/database.php';
 require __DIR__ . '/../../includes/funciones.php';
 ?>

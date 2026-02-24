@@ -159,6 +159,13 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
            class="btn-secundario">
             ← Volver a mis compras
         </a>
+
+        <?php if ($esAdmin || ($_SESSION['usuario']['rol'] === 'superadmin')): ?>
+            <a href="<?= BASE_URL ?>principal/admin/compras.php"
+               class="btn-secundario">
+                Ajustes
+            </a>
+        <?php endif; ?>
     </div>
 
 </main>

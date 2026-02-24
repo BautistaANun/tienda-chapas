@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php foreach ($errores as $error): ?>
             <p class="auth-error"><?= e($error) ?></p>
-            /Esto indica que estoy escapando la salida. Previniendo XSS.
+            
         <?php endforeach; ?>
 
         <form method="post" class="auth-form">

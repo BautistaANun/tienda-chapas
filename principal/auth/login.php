@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     
+
 // Consulta preparada para prevenir SQL Injection
     $stmt = $pdo->prepare("
         SELECT * FROM usuarios
