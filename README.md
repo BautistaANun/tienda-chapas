@@ -1,8 +1,8 @@
-🛒 Tienda Chapas – Sistema de ventas online
+-> Tienda Chapas – Sistema de ventas online
 
 Sistema de ventas online desarrollado en PHP + MySQL, con carrito de compras, pagos en efectivo y Mercado Pago, envío de mails automáticos y panel de usuario/admin.
 
-🚀 Requisitos del servidor
++ Requisitos del servidor
 
 PHP 8.0 o superior
 
@@ -16,7 +16,7 @@ Acceso a phpMyAdmin o similar
 
 SMTP activo (email del dominio recomendado)
 
-📂 Estructura del proyecto
++ Estructura del proyecto
 
 El proyecto debe subirse dentro de la carpeta pública del hosting (ej: public_html):
 
@@ -35,7 +35,7 @@ public_html/
 | ...
 |_vendor/...
 
-🗄️ Base de datos
++ Base de datos
 
 Crear una base de datos MySQL
 
@@ -44,8 +44,9 @@ Crear un usuario y asignarle todos los permisos
 Importar el archivo SQL:
 
 /database/tienda_chapas.sql
-⚙️ Configuración del proyecto
-🔧 config/database.php
+
+-> Configuración del proyecto
++ config/database.php
 
 Editar con los datos del hosting:
 
@@ -53,13 +54,15 @@ $host = 'localhost';
 $db   = 'NOMBRE_DB';
 $user = 'USUARIO_DB';
 $pass = 'PASSWORD_DB';
-🌐 config/config.php
+
++ config/config.php
 
 Configurar la URL base del sitio:
 
 define('BASE_URL', 'https://tudominio.com/');
 define('APP_ENV', 'prod'); // dev | prod
-🛍️ Panel de Administración
+
++ Panel de Administración
 
 Acceso restringido a usuarios con rol admin.
 
@@ -81,7 +84,7 @@ Control de estados de pedidos
 
 Las imágenes se almacenan en la carpeta /uploads/.
 
-💳 Mercado Pago (Producción)
++ Mercado Pago (Producción)
 
 Editar el archivo:
 
@@ -93,12 +96,12 @@ Access Token REAL
 
 Webhook Secret REAL
 
-🔔 Webhook en Mercado Pago Developers
++ Webhook en Mercado Pago Developers
 
 Configurar la URL:
 
 https://tudominio.com/principal/webhook_mp.php
-📧 Emails (SMTP)
++ Emails (SMTP)
 
 Configurar en:
 
@@ -110,7 +113,7 @@ ventas@tudominio.com
 
 Las credenciales SMTP se cargan en entorno de producción (prod).
 
-✅ Flujo del sistema
++ Flujo del sistema
 
 Compra en efectivo → mail automático al cliente y al admin
 
@@ -122,7 +125,7 @@ Admin puede ver todas las compras y estados
 
 Gestión completa de productos desde panel admin
 
-🧪 Pruebas recomendadas
++ Pruebas recomendadas
 
 Registro y login
 
@@ -138,7 +141,7 @@ Visualización en "Mis compras"
 
 Creación y edición de productos desde panel admin
 
-📌 Notas importantes
+| Notas importantes |
 
 El proyecto fue desarrollado y probado en entorno local (XAMPP).
 
