@@ -1,6 +1,7 @@
 -> Tienda Chapas – Sistema de ventas online
 
-Sistema de ventas online desarrollado en PHP + MySQL, con carrito de compras, pagos en efectivo y Mercado Pago, envío de mails automáticos y panel de usuario/admin.
+Sistema de ventas online desarrollado en PHP + MySQL, con carrito de compras, pagos en efectivo y Mercado Pago, envío de mails automáticos y panel de usuario/admin. Creado con la intención de modernizar un comercio minorista; su Instagram: ChapasRe.
+
 
 + Requisitos del servidor
 
