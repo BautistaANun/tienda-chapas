@@ -60,7 +60,7 @@ $pass = 'PASSWORD_DB';
 
 Configurar la URL base del sitio:
 
-define('BASE_URL', 'https://contacto@chapasre.store/');
+define('BASE_URL', 'https://dominio.com/');
 define('APP_ENV', 'prod'); // dev | prod
 
 + Panel de Administración
@@ -101,7 +101,7 @@ Webhook Secret REAL
 
 Configurar la URL:
 
-https://tudominio.com/principal/webhook_mp.php
+https://dominio.com/principal/webhook_mp.php
 + Emails (SMTP)
 
 Configurar en:
@@ -110,7 +110,7 @@ includes/mailer.php
 
 Recomendado usar un email del dominio:
 
-ventas@tudominio.com
+dominio.com
 
 Las credenciales SMTP se cargan en entorno de producción (prod).
 
