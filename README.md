@@ -60,7 +60,7 @@ $pass = 'PASSWORD_DB';
 
 Configurar la URL base del sitio:
 
-define('BASE_URL', 'https://tudominio.com/');
+define('BASE_URL', 'https://contacto@chapasre.store/');
 define('APP_ENV', 'prod'); // dev | prod
 
 + Panel de Administración
